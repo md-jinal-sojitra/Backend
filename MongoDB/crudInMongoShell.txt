@@ -1,0 +1,97 @@
+use blogsite
+db
+db.createCollection("Posts")
+
+db.posts.insertOne({
+...   title: "Post Title 1",
+...   body: "Body of post.",
+...   category: "News",
+...   likes: 1,
+...   tags: ["news", "events"],
+...   date: Date()
+... })
+{
+  acknowledged: true,
+  insertedId: ObjectId("641bea9212d33b45de36079e")
+}
+
+db.posts.insertMany([
+...   {
+...     title: "Post Title 2",
+...     body: "Body of post.",
+...     category: "Event",
+...     likes: 2,
+...     tags: ["news", "events"],
+...     date: Date()
+...   },
+...   {
+...     title: "Post Title 3",
+...     body: "Body of post.",
+...     category: "Technology",
+...     likes: 3,
+...     tags: ["news", "events"],
+...     date: Date()
+...   },
+...   {
+...     title: "Post Title 4",
+...     body: "Body of post.",
+...     category: "Event",
+...     likes: 4,
+...     tags: ["news", "events"],
+...     date: Date()
+...   }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("641bebd912d33b45de36079f"),
+    '1': ObjectId("641bebd912d33b45de3607a0"),
+    '2': ObjectId("641bebd912d33b45de3607a1")
+  }
+}
+
+db.posts.find()
+
+db.posts.find().pretty()
+
+db.posts.find({category: 'Technology'})
+
+db.posts.find().limit(2)
+
+db.posts.find().count()
+
+db.posts.find({},{title:1,date:1})
+
+Note: You cannot use both 0 and 1 in the same object. The only exception is the _id field.
+You should either specify the fields you would like to include or the fields you would like to exclude.
+
+Let's exclude the date category field. All other fields will be included in the results.
+
+db.posts.find({},{category:0})
+
+We will get an error if we try to specify both 0 and 1 in the same object.
+db.posts.find({}, {title: 1, date: 0})
+
+db.posts.updateOne({title:'Post Title 1'},{$set:{likes:2}})
+
+db.posts.updateOne(
+...   { title: "Post Title 5" },
+...   {
+...     $set:
+...       {
+...         title: "Post Title 5",
+...         body: "Body of post.",
+...         category: "Event",
+...         likes: 5,
+...         tags: ["news", "events"],
+...         date: Date()
+...       }
+...   },
+...   { upsert: true }
+... )
+
+ db.posts.deleteOne({title:'Post Title 5'})
+{ acknowledged: true, deletedCount: 1 }
+
+db.posts.updateMany({},{$inc: {likes:1}})
+
